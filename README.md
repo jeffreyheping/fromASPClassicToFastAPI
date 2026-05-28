@@ -17,17 +17,21 @@
 ```
 todo_fastapi_one_1/
 ├── app/                    # Vue.js 版本 - 前后端分离
-│   ├── main.py             # FastAPI + RESTful API
-│   ├── static/js/app.js    # Vue.js 3 前端
+│   ├── main.py             # FastAPI 入口
+│   ├── routers/todos.py    # RESTful API 路由
+│   ├── static/             # 静态文件
 │   ├── templates/          # Jinja2 模板
 │   ├── README.md           # Vue 版本说明
 │   └── SETUP.md            # Vue 版本搭建指南
 ├── app-1/                  # HTMX 版本 - 前端退化版
-│   ├── main.py             # FastAPI + HTMX
-│   ├── templates/          # Jinja2 模板（含 HTMX 属性）
+│   ├── main.py             # FastAPI 入口
+│   ├── routers/todos.py    # HTMX 路由
+│   ├── static/             # 静态文件
+│   ├── templates/          # Jinja2 模板
 │   ├── README.md           # HTMX 版本说明
 │   └── SETUP.md            # HTMX 版本搭建指南
 ├── requirements.txt        # 锁定版本的依赖清单
+├── ARCHITECTURE.md         # 架构对比文档
 └── README.md               # 本文件
 ```
 
@@ -119,10 +123,10 @@ uvicorn app-1.main:app --port 8003
 
 ## 详细文档
 
-| 版本 | 说明文档 | 搭建指南 |
-|------|---------|---------|
-| Vue.js | [app/README.md](app/README.md) | [app/SETUP.md](app/SETUP.md) |
-| HTMX | [app-1/README.md](app-1/README.md) | [app-1/SETUP.md](app-1/SETUP.md) |
+| 版本 | 说明文档 | 搭建指南 | 架构对比 |
+|------|---------|---------|---------|
+| Vue.js | [app/README.md](app/README.md) | [app/SETUP.md](app/SETUP.md) | [ARCHITECTURE.md](ARCHITECTURE.md) |
+| HTMX | [app-1/README.md](app-1/README.md) | [app-1/SETUP.md](app-1/SETUP.md) | [ARCHITECTURE.md](ARCHITECTURE.md) |
 
 ---
 

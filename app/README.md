@@ -129,26 +129,23 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 ## 项目结构
 
 ```
-todo_fastapi_one_1/
-├── app/
-│   ├── __init__.py              # 空文件，标识 Python 包
-│   ├── main.py                  # FastAPI 入口 + 路由注册（使用官方 Jinja2Templates）
-│   ├── config.py                # 配置（数据库 URI）
-│   ├── database.py              # SQLAlchemy 引擎 + 会话管理
-│   ├── models.py                # 数据模型（Todo 表）
-│   ├── schemas.py               # Pydantic 模型（请求/响应验证）
-│   ├── routers/
-│   │   ├── __init__.py          # 空文件
-│   │   └── todos.py             # RESTful API 路由（5 个端点）
-│   ├── static/
-│   │   ├── css/style.css        # 样式
-│   │   └── js/app.js            # Vue.js 3 前端逻辑
-│   └── templates/
-│       └── index.html           # 单页应用入口（Jinja2 + Vue.js 混合模板）
-├── tests/                       # 测试目录（待补充）
-├── requirements.txt             # 依赖清单（版本已锁定）
-├── SETUP.md                     # 详细搭建指南（照做一定成功）
-└── README.md                    # 本文件
+app/
+├── __init__.py              # 空文件，标识 Python 包
+├── main.py                  # FastAPI 入口
+├── config.py                # 配置（数据库 URI）
+├── database.py              # SQLAlchemy 引擎 + 会话管理
+├── models.py                # 数据模型（Todo 表）
+├── schemas.py               # Pydantic 模型（请求/响应验证）
+├── routers/
+│   ├── __init__.py          # 空文件
+│   └── todos.py             # RESTful API 路由（6 个端点）
+├── static/
+│   ├── css/style.css        # 样式
+│   └── js/app.js            # Vue.js 3 前端逻辑
+├── templates/
+│   └── index.html           # 单页应用入口（Jinja2 + Vue.js 混合模板）
+├── README.md                # 本文件
+└── SETUP.md                 # 详细搭建指南
 ```
 
 ---
@@ -158,7 +155,7 @@ todo_fastapi_one_1/
 ### 1. 安装依赖
 
 ```bash
-pip install -r requirements.txt --break-system-packages
+pip install -r ../requirements.txt --break-system-packages
 ```
 
 > `--break-system-packages` 选项用于系统 Python 环境安装。如果你使用虚拟环境（venv/conda），可以省略此选项。
@@ -190,6 +187,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 |------|------|------|
 | GET | `/api/todos` | 获取所有待办事项 |
 | POST | `/api/todos` | 新增待办事项 |
+| GET | `/api/todos/{id}` | 获取单个待办事项 |
 | PUT | `/api/todos/{id}` | 更新待办内容 |
 | PUT | `/api/todos/{id}/done` | 切换完成状态 |
 | DELETE | `/api/todos/{id}` | 删除待办事项 |

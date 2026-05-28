@@ -34,7 +34,6 @@ HTMX 让 HTML 元素具备 AJAX 能力，无需编写 JavaScript 代码。
 |------|------|------|
 | 后端框架 | FastAPI | 0.115.0 |
 | 数据库 | SQLite + SQLAlchemy | 2.0.36 |
-| 数据验证 | Pydantic | 2.9.2 |
 | 模板引擎 | Jinja2 | 3.1.2 |
 | 前端增强 | HTMX | 1.9.10 (CDN) |
 | 样式 | 原生 CSS | - |
@@ -48,7 +47,7 @@ HTMX 让 HTML 元素具备 AJAX 能力，无需编写 JavaScript 代码。
 | **前端技术** | Vue.js 3 + Options API | HTMX (无 JS 框架) |
 | **渲染方式** | 客户端渲染 (CSR) | 服务端渲染 (SSR) + 局部刷新 |
 | **数据交互** | RESTful API + JSON | 表单提交 + HTML 片段 |
-| **代码位置** | `app.js` 前端逻辑 | `main.py` 后端模板 |
+| **代码位置** | `app.js` 前端逻辑 | `routers/todos.py` 后端逻辑 |
 | **学习曲线** | 需学习 Vue 概念 | 只需理解 HTML 属性 |
 | **适用场景** | 复杂交互应用 | 简单 CRUD、教学过渡 |
 
@@ -62,7 +61,12 @@ app-1/
 ├── config.py              # 数据库配置
 ├── database.py            # SQLAlchemy 引擎
 ├── models.py              # 数据模型
-├── main.py                # FastAPI 入口 + 所有路由
+├── main.py                # FastAPI 入口
+├── routers/
+│   ├── __init__.py        # 空文件
+│   └── todos.py           # HTMX 路由（6 个端点）
+├── static/
+│   └── css/style.css      # 样式
 ├── templates/
 │   ├── index.html         # 主页面
 │   └── partials/
@@ -137,15 +141,15 @@ uvicorn app-1.main:app --host 0.0.0.0 --port 8003 --reload
 
 ## 路由端点
 
-| 方法 | 端点 | 功能 | HTMX 属性 |
-|------|------|------|----------|
-| GET | `/` | 首页（完整页面） | - |
-| GET | `/todos/list` | 获取列表片段 | `hx-get` |
-| POST | `/todos` | 新增待办 | `hx-post` |
-| PUT | `/todos/{id}` | 更新内容 | `hx-put` |
-| PUT | `/todos/{id}/toggle` | 切换完成状态 | `hx-put` |
-| DELETE | `/todos/{id}` | 删除待办 | `hx-delete` |
-| GET | `/todos/{id}/edit` | 获取编辑表单 | `hx-get` |
+| 方法 | 端点 | 功能 |
+|------|------|------|
+| GET | `/` | 首页（完整页面） |
+| GET | `/todos/list` | 获取列表片段 |
+| POST | `/todos` | 新增待办 |
+| GET | `/todos/{id}/edit` | 获取编辑表单 |
+| PUT | `/todos/{id}` | 更新内容 |
+| PUT | `/todos/{id}/toggle` | 切换完成状态 |
+| DELETE | `/todos/{id}` | 删除待办 |
 
 ---
 
@@ -171,7 +175,7 @@ uvicorn app-1.main:app --host 0.0.0.0 --port 8003 --reload
 
 ---
 
-## 从 here 到 there
+## 从 here  to there
 
 完成本版本学习后，可以：
 
