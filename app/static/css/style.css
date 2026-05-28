@@ -1,3 +1,5 @@
+/* Todo App 统一样式 - Vue/HTMX 通用 */
+
 * {
     margin: 0;
     padding: 0;
@@ -26,12 +28,13 @@ h1 {
     color: #1a1a2e;
 }
 
-/* 工具栏 */
+/* ========== 表单样式 ========== */
+
+/* Vue 版本：textarea 表单 */
 .toolbar {
     margin-bottom: 16px;
 }
 
-/* 表单 */
 .form-group {
     margin-bottom: 16px;
 }
@@ -58,7 +61,48 @@ h1 {
     justify-content: flex-end;
 }
 
-/* 按钮 */
+/* HTMX 版本：input 表单 */
+.add-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.add-form input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+}
+
+.add-form input:focus {
+    outline: none;
+    border-color: #4361ee;
+}
+
+.edit-form {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+}
+
+.edit-form input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 2px solid #4361ee;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: inherit;
+}
+
+.edit-form input:focus {
+    outline: none;
+}
+
+/* ========== 按钮样式 ========== */
+
 .btn {
     padding: 8px 16px;
     border: none;
@@ -97,7 +141,8 @@ h1 {
     font-size: 13px;
 }
 
-/* 待办列表 */
+/* ========== 待办列表样式 ========== */
+
 .todo-list {
     list-style: none;
 }
@@ -141,4 +186,41 @@ h1 {
     color: #999;
     padding: 40px 0;
     font-size: 15px;
+}
+
+/* ========== HTMX 专用样式 ========== */
+
+.htmx-indicator {
+    opacity: 0;
+    transition: opacity 200ms;
+}
+
+.htmx-request .htmx-indicator {
+    opacity: 1;
+}
+
+.htmx-request.htmx-indicator {
+    opacity: 1;
+}
+
+/* 说明框 */
+.info-box {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 16px;
+    background: #e8f4f8;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+.info-box strong {
+    color: #333;
+}
+
+.info-box code {
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
 }
