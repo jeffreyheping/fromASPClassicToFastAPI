@@ -1,10 +1,9 @@
-"""FastAPI + HTMX 应用入口
+"""FastAPI 应用入口
 
 HTMX 版本特点：
 - 不使用 Vue.js，纯服务端渲染 + 局部刷新
 - 通过 hx-* 属性实现 AJAX 请求
 - 后端返回 HTML 片段，直接替换 DOM
-- 让孩子们理解「局部刷新」的底层原理
 """
 from fastapi import FastAPI, Request, Depends
 from fastapi.staticfiles import StaticFiles
@@ -19,7 +18,7 @@ from .routers import todos
 Base.metadata.create_all(bind=engine)
 
 # 创建 FastAPI 实例
-app = FastAPI(title="Todo App - HTMX 版", version="1.0.0")
+app = FastAPI(title="Todo App", version="1.0.0")
 
 # 模板引擎
 templates = Jinja2Templates(directory="app-1/templates")
@@ -31,10 +30,10 @@ app.include_router(todos.router)
 @app.get("/")
 def index(request: Request, db: Session = Depends(get_db)):
     """首页 - 显示完整页面"""
-    todos_list = db.query(Todo).order_by(Todo.id.desc()).all()
+    todos = db.query(Todo).order_by(Todo.id.desc()).all()
     return templates.TemplateResponse("index.html", {
         "request": request,
-        "todos": todos_list
+        "todos": todos
     })
 
 

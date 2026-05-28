@@ -1,4 +1,4 @@
-"""Todo HTMX 路由 - 服务端渲染"""
+"""Todo 路由 - 服务端渲染，返回 HTML 片段"""
 from fastapi import APIRouter, Request, Depends, Form
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -8,13 +8,13 @@ from ..models import Todo
 
 router = APIRouter(prefix="/todos", tags=["todos"])
 
-# 模板引擎（供路由使用）
+# 模板引擎
 templates = Jinja2Templates(directory="app-1/templates")
 
 
 @router.get("/list")
-def todo_list(request: Request, db: Session = Depends(get_db)):
-    """HTMX: 获取待办列表片段（用于局部刷新）"""
+def get_todo_list(request: Request, db: Session = Depends(get_db)):
+    """获取待办列表片段"""
     todos = db.query(Todo).order_by(Todo.id.desc()).all()
     return templates.TemplateResponse("partials/todo_list.html", {
         "request": request,
@@ -28,7 +28,7 @@ def create_todo(
     info: str = Form(...),
     db: Session = Depends(get_db)
 ):
-    """HTMX: 新增待办"""
+    """新增待办事项"""
     todo = Todo(info=info)
     db.add(todo)
     db.commit()
@@ -42,33 +42,13 @@ def create_todo(
     })
 
 
-@router.put("/{todo_id}/toggle")
-def toggle_todo(
-    request: Request,
-    todo_id: int,
-    db: Session = Depends(get_db)
-):
-    """HTMX: 切换完成状态"""
-    todo = db.query(Todo).filter(Todo.id == todo_id).first()
-    if todo:
-        todo.status = 1 - (todo.status or 0)
-        db.commit()
-
-    # 返回更新后的列表
-    todos = db.query(Todo).order_by(Todo.id.desc()).all()
-    return templates.TemplateResponse("partials/todo_list.html", {
-        "request": request,
-        "todos": todos
-    })
-
-
 @router.get("/{todo_id}/edit")
-def edit_form(
+def get_edit_form(
     request: Request,
     todo_id: int,
     db: Session = Depends(get_db)
 ):
-    """HTMX: 获取编辑表单"""
+    """获取编辑表单"""
     todo = db.query(Todo).filter(Todo.id == todo_id).first()
     return templates.TemplateResponse("partials/edit_form.html", {
         "request": request,
@@ -83,10 +63,30 @@ def update_todo(
     info: str = Form(...),
     db: Session = Depends(get_db)
 ):
-    """HTMX: 更新待办"""
+    """更新待办事项内容"""
     todo = db.query(Todo).filter(Todo.id == todo_id).first()
     if todo:
         todo.info = info
+        db.commit()
+
+    # 返回更新后的列表
+    todos = db.query(Todo).order_by(Todo.id.desc()).all()
+    return templates.TemplateResponse("partials/todo_list.html", {
+        "request": request,
+        "todos": todos
+    })
+
+
+@router.put("/{todo_id}/toggle")
+def toggle_done(
+    request: Request,
+    todo_id: int,
+    db: Session = Depends(get_db)
+):
+    """切换完成状态"""
+    todo = db.query(Todo).filter(Todo.id == todo_id).first()
+    if todo:
+        todo.status = 1 - (todo.status or 0)
         db.commit()
 
     # 返回更新后的列表
@@ -103,7 +103,7 @@ def delete_todo(
     todo_id: int,
     db: Session = Depends(get_db)
 ):
-    """HTMX: 删除待办"""
+    """删除待办事项"""
     todo = db.query(Todo).filter(Todo.id == todo_id).first()
     if todo:
         db.delete(todo)

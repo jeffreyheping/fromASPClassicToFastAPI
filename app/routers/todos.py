@@ -1,4 +1,4 @@
-"""Todo RESTful API 路由"""
+"""Todo 路由 - RESTful API，返回 JSON"""
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -12,7 +12,7 @@ router = APIRouter(prefix="/api/todos", tags=["todos"])
 
 @router.get("", response_model=List[TodoSchema])
 def get_todos(db: Session = Depends(get_db)):
-    """获取所有待办事项，按 id 倒序"""
+    """获取所有待办事项"""
     return db.query(Todo).order_by(Todo.id.desc()).all()
 
 
@@ -23,6 +23,15 @@ def create_todo(todo_in: TodoCreate, db: Session = Depends(get_db)):
     db.add(todo)
     db.commit()
     db.refresh(todo)
+    return todo
+
+
+@router.get("/{todo_id}", response_model=TodoSchema)
+def get_todo(todo_id: int, db: Session = Depends(get_db)):
+    """获取单个待办事项"""
+    todo = db.query(Todo).filter(Todo.id == todo_id).first()
+    if not todo:
+        raise HTTPException(status_code=404, detail="Todo not found")
     return todo
 
 
