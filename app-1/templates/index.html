@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - HTMX 版</title>
+    <!-- HTMX CDN -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 24px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+
+        .add-form {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .add-form input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        .add-form input:focus {
+            outline: none;
+            border-color: #4361ee;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            background: #e0e0e0;
+            color: #333;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-primary {
+            background: #4361ee;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #3a56d4;
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: #e63946;
+        }
+
+        .btn-danger:hover {
+            background: #fff0f0;
+        }
+
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 13px;
+        }
+
+        .todo-list {
+            list-style: none;
+        }
+
+        .todo-list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .todo-list li:last-child {
+            border-bottom: none;
+        }
+
+        .todo-list .info {
+            flex: 1;
+            cursor: pointer;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+
+        .todo-list .info:hover {
+            color: #4361ee;
+        }
+
+        .todo-list .done .info {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .todo-list .actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #999;
+            padding: 40px 0;
+            font-size: 15px;
+        }
+
+        .edit-form {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .edit-form input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid #4361ee;
+            border-radius: 6px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        .edit-form input:focus {
+            outline: none;
+        }
+
+        /* HTMX 加载动画 */
+        .htmx-indicator {
+            opacity: 0;
+            transition: opacity 200ms;
+        }
+
+        .htmx-request .htmx-indicator {
+            opacity: 1;
+        }
+
+        .htmx-request.htmx-indicator {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 待办事项 (HTMX 版)</h1>
+
+        <!-- 新增表单 -->
+        <form class="add-form"
+              hx-post="/todos"
+              hx-target="#todo-list"
+              hx-swap="innerHTML"
+              hx-on::after-request="this.reset()">
+            <input type="text" name="info" placeholder="输入待办事项..." required>
+            <button type="submit" class="btn btn-primary">+ 新增</button>
+        </form>
+
+        <!-- 待办列表 -->
+        <div id="todo-list">
+            {% include "partials/todo_list.html" %}
+        </div>
+    </div>
+
+    <!-- 说明 -->
+    <div style="max-width: 600px; margin: 20px auto; padding: 16px; background: #e8f4f8; border-radius: 8px; font-size: 14px; color: #555;">
+        <strong>💡 HTMX 原理说明：</strong><br>
+        这个版本没有使用 Vue.js，而是通过 HTMX 的 <code>hx-*</code> 属性实现局部刷新。<br>
+        点击「完成」「编辑」「删除」时，浏览器发送 AJAX 请求，后端返回 HTML 片段，HTMX 自动替换页面内容。<br>
+        这样孩子们可以先理解「局部刷新」的底层原理，再学习前端框架。
+    </div>
+</body>
+</html>
