@@ -1,0 +1,144 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 24px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #1a1a2e;
+}
+
+/* 工具栏 */
+.toolbar {
+    margin-bottom: 16px;
+}
+
+/* 表单 */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+
+.form-group textarea:focus {
+    outline: none;
+    border-color: #4361ee;
+}
+
+.form-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+/* 按钮 */
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #e0e0e0;
+    color: #333;
+    transition: background 0.2s;
+}
+
+.btn:hover {
+    background: #d0d0d0;
+}
+
+.btn-primary {
+    background: #4361ee;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #3a56d4;
+}
+
+.btn-danger {
+    background: transparent;
+    color: #e63946;
+}
+
+.btn-danger:hover {
+    background: #fff0f0;
+}
+
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 13px;
+}
+
+/* 待办列表 */
+.todo-list {
+    list-style: none;
+}
+
+.todo-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.todo-list li:last-child {
+    border-bottom: none;
+}
+
+.todo-list .info {
+    flex: 1;
+    cursor: pointer;
+    font-size: 15px;
+    transition: color 0.2s;
+}
+
+.todo-list .info:hover {
+    color: #4361ee;
+}
+
+.todo-list .done .info {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.todo-list .actions {
+    display: flex;
+    gap: 4px;
+}
+
+/* 空状态 */
+.empty {
+    text-align: center;
+    color: #999;
+    padding: 40px 0;
+    font-size: 15px;
+}
