@@ -1,0 +1,15 @@
+<li>
+    <form class="edit-form"
+          hx-put="/todos/{{ todo.id }}"
+          hx-target="#todo-list"
+          hx-swap="innerHTML">
+        <input type="text" name="info" value="{{ todo.info }}" required autofocus>
+        <button type="submit" class="btn btn-primary btn-sm">保存</button>
+        <button type="button" class="btn btn-sm"
+                hx-get="/todos/list"
+                hx-target="#todo-list"
+                hx-swap="innerHTML">
+            取消
+        </button>
+    </form>
+</li>
