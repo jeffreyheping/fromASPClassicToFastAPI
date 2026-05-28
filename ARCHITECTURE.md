@@ -18,7 +18,7 @@
 ### Vue 版本 - 返回 JSON
 
 ```python
-@app.get("/api/todos", response_model=List[TodoSchema])
+@router.get("", response_model=List[TodoSchema])
 def get_todos(db: Session = Depends(get_db)):
     """获取所有待办事项"""
     return db.query(Todo).order_by(Todo.id.desc()).all()
@@ -41,9 +41,9 @@ def get_todos(db: Session = Depends(get_db)):
 ### HTMX 版本 - 返回 HTML 片段
 
 ```python
-@app.get("/todos/list")
-def todo_list(request: Request, db: Session = Depends(get_db)):
-    """HTMX: 获取待办列表片段"""
+@router.get("/list")
+def get_todo_list(request: Request, db: Session = Depends(get_db)):
+    """获取待办列表片段"""
     todos = db.query(Todo).order_by(Todo.id.desc()).all()
     return templates.TemplateResponse("partials/todo_list.html", {
         "request": request,
@@ -70,26 +70,26 @@ def todo_list(request: Request, db: Session = Depends(get_db)):
 ### Vue 版本 - JSON API
 
 ```python
-@app.post("/api/todos", response_model=TodoSchema, status_code=201)
+@router.post("", response_model=TodoSchema, status_code=status.HTTP_201_CREATED)
 def create_todo(todo_in: TodoCreate, db: Session = Depends(get_db)):
     """新增待办事项"""
-    todo = Todo(info=todo_in.info)  # ← 从 JSON 解析
+    todo = Todo(info=todo_in.info)
     db.add(todo)
     db.commit()
     db.refresh(todo)
-    return todo  # ← 返回 JSON
+    return todo
 ```
 
-**前端代码**（`app.js`）：
+**前端代码**（`app/static/js/app.js`）：
 ```javascript
 async saveAdd() {
     const res = await fetch('/api/todos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ info: this.form.info })  // ← 发送 JSON
+        body: JSON.stringify({ info: this.form.info })
     });
-    const newTodo = await res.json();  // ← 接收 JSON
-    this.todos.unshift(newTodo);  // ← 自己更新列表
+    const newTodo = await res.json();
+    this.todos.unshift(newTodo);
     this.view = 'list';
 }
 ```
@@ -99,18 +99,17 @@ async saveAdd() {
 ### HTMX 版本 - 表单处理
 
 ```python
-@app.post("/todos")
+@router.post("")
 def create_todo(
     request: Request,
-    info: str = Form(...),  # ← 接收表单数据，不是 JSON！
+    info: str = Form(...),
     db: Session = Depends(get_db)
 ):
-    """HTMX: 新增待办"""
+    """新增待办事项"""
     todo = Todo(info=info)
     db.add(todo)
     db.commit()
-    
-    # 返回整个列表的 HTML，不是单个对象！
+
     todos = db.query(Todo).order_by(Todo.id.desc()).all()
     return templates.TemplateResponse("partials/todo_list.html", {
         "request": request,
@@ -120,15 +119,14 @@ def create_todo(
 
 **前端代码**（HTML 属性）：
 ```html
-<form hx-post="/todos"           <!-- 发送表单数据 -->
-      hx-target="#todo-list"     <!-- 更新这个元素 -->
-      hx-swap="innerHTML"        <!-- 替换内部内容 -->
-      hx-on::after-request="this.reset()">  <!-- 提交后清空表单 -->
+<form hx-post="/todos"
+      hx-target="#todo-list"
+      hx-swap="innerHTML"
+      hx-on::after-request="this.reset()">
     <input type="text" name="info" placeholder="输入待办事项..." required>
     <button type="submit">+ 新增</button>
 </form>
 
-<!-- 这个 div 会被后端返回的 HTML 替换 -->
 <div id="todo-list">
     {% include "partials/todo_list.html" %}
 </div>
@@ -142,6 +140,7 @@ def create_todo(
 
 | 方面 | Vue 版本 | HTMX 版本 |
 |------|---------|----------|
+| **路由文件** | `app/routers/todos.py` | `app-1/routers/todos.py` |
 | **路由前缀** | `/api/todos` | `/todos` |
 | **请求方法** | `POST /api/todos` | `POST /todos` |
 | **请求体格式** | JSON: `{"info": "xxx"}` | 表单: `info=xxx` |

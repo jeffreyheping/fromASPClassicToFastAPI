@@ -38,7 +38,6 @@ mkdir -p app/routers
 mkdir -p app/static/css
 mkdir -p app/static/js
 mkdir -p app/templates
-mkdir -p tests
 ```
 
 创建完成后，目录结构应该是：
@@ -51,7 +50,6 @@ todo_fastapi_one_1/
 │   │   ├── css/
 │   │   └── js/
 │   └── templates/
-└── tests/
 ```
 
 ---
@@ -179,7 +177,7 @@ class TodoSchema(BaseModel):
 
 > ⚠️ **重要**：Pydantic 2.x 的配置方式变了！必须用 `model_config = {"from_attributes": True}`，不能用旧的 `class Config: orm_mode = True`。
 
-### 4.5 API 路由
+### 4.5 路由模块
 
 创建 `app/routers/__init__.py`（空文件）：
 
@@ -190,7 +188,7 @@ touch app/routers/__init__.py
 创建 `app/routers/todos.py`：
 
 ```python
-"""Todo RESTful API 路由"""
+"""Todo 路由 - RESTful API，返回 JSON"""
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -204,7 +202,7 @@ router = APIRouter(prefix="/api/todos", tags=["todos"])
 
 @router.get("", response_model=List[TodoSchema])
 def get_todos(db: Session = Depends(get_db)):
-    """获取所有待办事项，按 id 倒序"""
+    """获取所有待办事项"""
     return db.query(Todo).order_by(Todo.id.desc()).all()
 
 
@@ -215,6 +213,15 @@ def create_todo(todo_in: TodoCreate, db: Session = Depends(get_db)):
     db.add(todo)
     db.commit()
     db.refresh(todo)
+    return todo
+
+
+@router.get("/{todo_id}", response_model=TodoSchema)
+def get_todo(todo_id: int, db: Session = Depends(get_db)):
+    """获取单个待办事项"""
+    todo = db.query(Todo).filter(Todo.id == todo_id).first()
+    if not todo:
+        raise HTTPException(status_code=404, detail="Todo not found")
     return todo
 
 
@@ -265,7 +272,13 @@ touch app/__init__.py
 创建 `app/main.py`：
 
 ```python
-"""FastAPI 应用入口"""
+"""FastAPI 应用入口
+
+Vue 版本特点：
+- 前后端分离，前端使用 Vue.js 3
+- 后端提供 RESTful API，返回 JSON
+- 前端通过 fetch 调用 API，自行渲染页面
+"""
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -279,19 +292,16 @@ Base.metadata.create_all(bind=engine)
 # 创建 FastAPI 实例
 app = FastAPI(title="Todo App", version="1.0.0")
 
-# 模板引擎（官方推荐方式）
+# 模板引擎
 templates = Jinja2Templates(directory="app/templates")
 
-# 注册路由（必须在 mount 之前）
+# 注册路由
 app.include_router(todos.router)
 
 
 @app.get("/")
 def index(request: Request):
-    """前端单页应用入口
-    
-    使用 Jinja2Templates 渲染模板，request 对象必须传入模板上下文
-    """
+    """首页 - 前端单页应用入口"""
     return templates.TemplateResponse("index.html", {"request": request})
 
 
@@ -547,26 +557,22 @@ createApp({
         this.loadTodos();
     },
     methods: {
-        // 加载所有待办
         async loadTodos() {
             const res = await fetch(API);
             this.todos = await res.json();
         },
 
-        // 切换完成状态
         async toggleDone(id) {
             await fetch(`${API}/${id}/done`, { method: 'PUT' });
             this.loadTodos();
         },
 
-        // 进入编辑模式
         editTodo(todo) {
             this.editingId = todo.id;
             this.form.info = todo.info;
             this.view = 'edit';
         },
 
-        // 新增待办
         async saveAdd() {
             const info = this.form.info.trim();
             if (!info) return;
@@ -580,7 +586,6 @@ createApp({
             this.loadTodos();
         },
 
-        // 更新待办
         async saveEdit() {
             const info = this.form.info.trim();
             if (!info) return;
@@ -595,7 +600,6 @@ createApp({
             this.loadTodos();
         },
 
-        // 删除待办
         async deleteTodo(id) {
             if (!confirm('确定要删除吗？')) return;
             await fetch(`${API}/${id}`, { method: 'DELETE' });
@@ -738,27 +742,25 @@ uvicorn app.main:app --port 8080 --reload
 ```
 todo_fastapi_one_1/
 ├── app/
-│   ├── __init__.py              # 空文件
-│   ├── main.py                  # FastAPI 入口（使用官方 Jinja2Templates）
-│   ├── config.py                # 配置
-│   ├── database.py              # 数据库
-│   ├── models.py                # 数据模型
-│   ├── schemas.py               # Pydantic 模型
+│   ├── __init__.py
+│   ├── main.py
+│   ├── config.py
+│   ├── database.py
+│   ├── models.py
+│   ├── schemas.py
 │   ├── routers/
-│   │   ├── __init__.py          # 空文件
-│   │   └── todos.py             # API 路由
+│   │   ├── __init__.py
+│   │   └── todos.py
 │   ├── static/
-│   │   ├── css/style.css        # 样式
-│   │   └── js/app.js            # Vue.js
+│   │   ├── css/style.css
+│   │   └── js/app.js
 │   └── templates/
-│       └── index.html           # 前端页面（使用 Jinja2 模板语法）
-├── tests/
-├── requirements.txt             # 版本锁定！
-├── README.md                    # 项目说明
-└── SETUP.md                     # 本文件
+│       └── index.html
+├── requirements.txt
+└── README.md
 ```
 
-共 **9 个代码文件**（不含空目录和文档），全部创建完成后即可运行。
+共 **10 个代码文件**，全部创建完成后即可运行。
 
 ---
 
