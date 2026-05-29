@@ -2,7 +2,8 @@
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Depends, Request
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import hashlib
 
 # JWT配置
@@ -40,3 +41,46 @@ def decode_access_token(token: str) -> Optional[dict]:
         return payload
     except JWTError:
         return None
+
+
+# ============================================================
+# FastAPI 依赖注入：JWT 认证（供 Vue 版 API 路由使用）
+# ============================================================
+
+_bearer_scheme = HTTPBearer()
+
+
+def get_current_user_jwt(
+    credentials: HTTPAuthorizationCredentials = Depends(_bearer_scheme),
+) -> dict:
+    """从请求头 Bearer token 中解析用户信息，未登录返回401"""
+    payload = decode_access_token(credentials.credentials)
+    if not payload:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="无效的令牌，请重新登录",
+        )
+    return {
+        "id": int(payload["sub"]),
+        "username": payload["username"],
+        "role": payload["role"],
+    }
+
+
+# ============================================================
+# FastAPI 依赖注入：Session 认证（供 HTMX 版 Web 路由使用）
+# ============================================================
+
+def get_current_user_session(request: Request) -> dict:
+    """从 Session 中获取用户信息，未登录返回401"""
+    user_id = request.session.get("user_id")
+    if not user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="未登录，请先登录",
+        )
+    return {
+        "id": user_id,
+        "username": request.session.get("username"),
+        "role": request.session.get("role"),
+    }
