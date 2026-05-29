@@ -46,6 +46,11 @@ createApp({
                 this.isLoggedIn = true;
                 this.showLogin = false;
                 this.authForm = { username: '', password: '' };
+                // staff角色跳转到HTMX版
+                if (data.user.role === 'staff') {
+                    window.location.href = '/internal';
+                    return;
+                }
                 this.loadTodos();
             } catch (e) {
                 this.authError = '网络错误';
@@ -86,6 +91,11 @@ createApp({
                 if (res.ok) {
                     this.currentUser = await res.json();
                     this.isLoggedIn = true;
+                    // staff角色跳转到HTMX版
+                    if (this.currentUser.role === 'staff') {
+                        window.location.href = '/internal';
+                        return;
+                    }
                     this.loadTodos();
                 } else {
                     localStorage.removeItem('token');
