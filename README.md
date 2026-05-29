@@ -109,10 +109,10 @@ pip install -r requirements.txt --break-system-packages
 
 ```bash
 # 阶段 1 — Vue 版本
-uvicorn app.main:app --port 8000
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 # 阶段 1 — HTMX 版本
-uvicorn app-1.main:app --port 8003
+uvicorn app-1.main:app --host 0.0.0.0 --port 8003 --reload
 
 # 阶段 2 — 双 UI 合并
 uvicorn app1.main:app --host 0.0.0.0 --port 8005 --reload
