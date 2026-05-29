@@ -7,9 +7,9 @@ from fastapi import APIRouter, Request, Depends, Form
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from core import services
-from core.security import get_current_user_session
+from ...core.database import get_db
+from ...core import services
+from ...core.security import get_current_user_session
 
 router = APIRouter(prefix="/todos", tags=["web"])
 

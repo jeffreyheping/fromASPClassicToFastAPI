@@ -124,7 +124,7 @@ createApp({
         async toggleDone(id) {
             const token = localStorage.getItem('token');
             const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-            await fetch(`${API}/${id}/done`, { method: 'PUT', headers });
+            await fetch(`${API}/${id}/toggle`, { method: 'PUT', headers });
             this.loadTodos();
         },
 

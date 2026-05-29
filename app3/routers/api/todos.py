@@ -6,9 +6,9 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from core import schemas, services
-from core.security import get_current_user_oauth2
+from ...core.database import get_db
+from ...core import schemas, services
+from ...core.security import get_current_user_oauth2
 
 router = APIRouter(prefix="/api/todos", tags=["api"])
 

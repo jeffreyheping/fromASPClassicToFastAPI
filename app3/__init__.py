@@ -1,1 +1,1 @@
-# app2 — 双 UI 架构 + 认证
+# app3 — 双 UI 架构 + OAuth2 认证

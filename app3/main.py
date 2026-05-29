@@ -1,4 +1,4 @@
-"""FastAPI 应用入口 - 双 UI 架构（app2版本）
+"""FastAPI 应用入口 - 双 UI 架构（app3版本）
 
 外部客人 → /      → Vue.js SPA → /api/todos (JSON)
 内部员工 → /internal → HTMX 页面  → /todos    (HTML 片段)
@@ -13,19 +13,19 @@ from fastapi.responses import RedirectResponse, JSONResponse
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 
-from core.database import engine, Base, get_db
-from core import services
-from core.security import get_current_user_session
-from routers.api import todos as api_todos
-from routers.web import todos as web_todos
-from routers.api import auth as api_auth
-from routers.web import auth as web_auth
+from .core.database import engine, Base, get_db
+from .core import services
+from .core.security import get_current_user_session
+from .routers.api import todos as api_todos
+from .routers.web import todos as web_todos
+from .routers.api import auth as api_auth
+from .routers.web import auth as web_auth
 
 # 创建数据库表（必须在 engine 创建之后、首次请求之前）
 Base.metadata.create_all(bind=engine)
 
 # 创建 FastAPI 实例
-app = FastAPI(title="Todo App - Dual UI (app2)", version="1.0.0")
+app = FastAPI(title="Todo App - Dual UI (app3)", version="1.0.0")
 
 # 添加 Session 中间件（用于 HTMX 登录）
 app.add_middleware(
