@@ -134,6 +134,8 @@ pytest app4/tests/ -v
 
 ## 技术栈（版本已锁定）
 
+### 阶段 1 — Web 基础（app/, app-1/, app1/）
+
 | 组件 | 版本 | 说明 |
 |------|------|------|
 | FastAPI | 0.115.0 | Web 框架 |
@@ -141,9 +143,24 @@ pytest app4/tests/ -v
 | SQLAlchemy | 2.0.36 | ORM |
 | Pydantic | 2.9.2 | 数据验证 |
 | Jinja2 | 3.1.2 | 模板引擎 |
-| python-jose | 3.5.0 | JWT 生成/验证（app3/app4） |
-| passlib + bcrypt | 1.7.4 / 4.0.1 | 密码哈希（app3/app4） |
-| pytest | 9.0.3 | 测试框架（app4） |
+| Starlette | 0.38.6 | ASGI 工具集 |
+| python-multipart | 0.0.29 | 表单解析（app-1/ HTMX 引入） |
+| Vue.js 3 | CDN | SPA 前端 |
+| HTMX | 1.9.10 | 局部刷新 |
+
+### 阶段 3 — 认证（app3/, app4/）
+
+| 组件 | 版本 | 说明 |
+|------|------|------|
+| python-jose | 3.5.0 | JWT 生成/验证 |
+| passlib | 1.7.4 | 密码哈希 |
+| bcrypt | 4.0.1 | bcrypt 算法后端 |
+
+### 阶段 4 — 测试（app4/）
+
+| 组件 | 版本 | 说明 |
+|------|------|------|
+| pytest | 9.0.3 | 测试框架 |
 | httpx | 0.28.1 | HTTP 客户端（TestClient 依赖） |
 | Vue.js 3 | CDN | SPA 前端 |
 | HTMX | 1.9.10 | 局部刷新 |
