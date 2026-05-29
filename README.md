@@ -142,7 +142,9 @@ pytest app4/tests/ -v
 | Pydantic | 2.9.2 | 数据验证 |
 | Jinja2 | 3.1.2 | 模板引擎 |
 | python-jose | 3.5.0 | JWT 生成/验证（app3/app4） |
-| pytest | — | 测试框架（app4） |
+| passlib + bcrypt | 1.7.4 / 4.0.1 | 密码哈希（app3/app4） |
+| pytest | 9.0.3 | 测试框架（app4） |
+| httpx | 0.28.1 | HTTP 客户端（TestClient 依赖） |
 | Vue.js 3 | CDN | SPA 前端 |
 | HTMX | 1.9.10 | 局部刷新 |
 
