@@ -2,17 +2,19 @@
 
 所有接口需要 Session 认证（已登录）。
 """
+from pathlib import Path
 from fastapi import APIRouter, Request, Depends, Form
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from core import services
-from core.security import get_current_user_session
+from ...core.database import get_db
+from ...core import services
+from ...core.security import get_current_user_session
 
 router = APIRouter(prefix="/todos", tags=["web"])
 
-templates = Jinja2Templates(directory="templates")
+_tpl_dir = Path(__file__).resolve().parent.parent.parent / "templates"
+templates = Jinja2Templates(directory=str(_tpl_dir))
 
 
 @router.get("/list")

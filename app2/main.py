@@ -6,19 +6,20 @@
 两套 UI 共享同一个 FastAPI 实例 + 同一套 core/services 业务逻辑层。
 """
 from pathlib import Path
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import RedirectResponse, JSONResponse
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 
-from core.database import engine, Base, get_db
-from core import services
-from core.security import get_current_user_session
-from routers.api import todos as api_todos
-from routers.web import todos as web_todos
-from routers.api import auth as api_auth
-from routers.web import auth as web_auth
+from .core.database import engine, Base, get_db
+from .core import services
+from .core.security import get_current_user_session
+from .routers.api import todos as api_todos
+from .routers.web import todos as web_todos
+from .routers.api import auth as api_auth
+from .routers.web import auth as web_auth
 
 # 创建数据库表（必须在 engine 创建之后、首次请求之前）
 Base.metadata.create_all(bind=engine)
@@ -36,6 +37,18 @@ app.add_middleware(
 # 模板引擎（绝对路径，不依赖运行时当前目录）
 _tpl_dir = Path(__file__).resolve().parent / "templates"
 templates = Jinja2Templates(directory=str(_tpl_dir))
+
+# 401 异常处理：浏览器请求 → 重定向到登录页，API 请求 → 返回 JSON
+@app.exception_handler(HTTPException)
+async def auth_exception_handler(request: Request, exc: HTTPException):
+    if exc.status_code == 401:
+        accept = request.headers.get("accept", "")
+        if "text/html" in accept:
+            return RedirectResponse(url="/auth/login", status_code=302)
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+    )
 
 # 注册路由
 app.include_router(api_todos.router)   # /api/todos → JSON

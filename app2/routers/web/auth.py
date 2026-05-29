@@ -1,16 +1,18 @@
 """Web认证路由 - Session登录注册（供HTMX前端使用）"""
+from pathlib import Path
 from fastapi import APIRouter, Request, Depends, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from core.models import User
-from core import security
+from ...core.database import get_db
+from ...core.models import User
+from ...core import security
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-templates = Jinja2Templates(directory="templates")
+_tpl_dir = Path(__file__).resolve().parent.parent.parent / "templates"
+templates = Jinja2Templates(directory=str(_tpl_dir))
 
 
 @router.get("/login")
