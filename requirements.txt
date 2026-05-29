@@ -1,5 +1,5 @@
 # 版本锁定 - 确保教学项目长期稳定运行
-# 更新日期: 2026-05-27
+# 更新日期: 2026-05-29
 # 测试环境: Python 3.10, Ubuntu 22.04
 
 fastapi==0.115.0
@@ -8,6 +8,12 @@ sqlalchemy==2.0.36
 pydantic==2.9.2
 jinja2==3.1.2
 starlette==0.38.6
+python-multipart==0.0.29
+
+# app2 认证相关
+python-jose==3.5.0
+passlib==1.7.4
+bcrypt==4.0.1
 
 # 注意: 不要随意升级版本!
 # 如需升级, 请先在测试环境验证所有功能正常
