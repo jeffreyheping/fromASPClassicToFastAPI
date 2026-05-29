@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - HTMX 内部管理</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/internal.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header-bar">
+            <h1>Todo (HTMX 版 - 内部员工)</h1>
+            <div class="user-info">
+                <span>{{ username }} ({{ role }})</span>
+                <form action="/auth/logout" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-sm">退出</button>
+                </form>
+            </div>
+        </div>
+
+        <form class="add-form"
+              hx-post="/todos"
+              hx-target="#todo-list"
+              hx-swap="innerHTML"
+              hx-on::after-request="this.reset()">
+            <input type="text" name="info" placeholder="输入待办事项..." required>
+            <button type="submit" class="btn btn-primary">+ 新增</button>
+        </form>
+
+        <div id="todo-list">
+            {% include "partials/todo_list.html" %}
+        </div>
+    </div>
+
+    <div class="info-box">
+        <strong>双 UI 架构说明：</strong><br>
+        本页由 <code>routers/web/todos.py</code> 渲染 HTML 片段，通过 HTMX <code>hx-*</code> 属性局部刷新。<br>
+        Vue 版在 <a href="/">/</a>，由 <code>routers/api/todos.py</code> 返回 JSON。<br>
+        两套 UI 共享同一套 <code>core/services.py</code> 业务逻辑层。
+    </div>
+</body>
+</html>

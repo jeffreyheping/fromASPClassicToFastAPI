@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - FastAPI + Vue.js</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/app.css') }}">
+</head>
+<body>
+    <div id="app">
+        <!-- 未登录状态 -->
+        <div v-if="!isLoggedIn" class="container">
+            <h1>Todo (Vue 版 - 外部客人)</h1>
+            <div class="auth-prompt">
+                <p>欢迎使用 Todo 应用</p>
+                <div class="auth-buttons">
+                    <button class="btn btn-primary" @click="showLogin = true">登录</button>
+                    <button class="btn" @click="showRegister = true">注册</button>
+                </div>
+            </div>
+
+            <!-- 登录弹窗 -->
+            <div v-if="showLogin" class="modal-overlay" @click="showLogin = false">
+                <div class="modal" @click.stop>
+                    <h2>🔐 登录</h2>
+                    <div v-if="authError" class="error-message">{{ '{{' }} authError {{ '}}' }}</div>
+                    <div class="form-group">
+                        <input type="text" v-model="authForm.username" placeholder="用户名" @keyup.enter="doLogin">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" v-model="authForm.password" placeholder="密码" @keyup.enter="doLogin">
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn" @click="showLogin = false">取消</button>
+                        <button class="btn btn-primary" @click="doLogin">登录</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 注册弹窗 -->
+            <div v-if="showRegister" class="modal-overlay" @click="showRegister = false">
+                <div class="modal" @click.stop>
+                    <h2>📝 注册</h2>
+                    <div v-if="authError" class="error-message">{{ '{{' }} authError {{ '}}' }}</div>
+                    <div class="form-group">
+                        <input type="text" v-model="authForm.username" placeholder="用户名" @keyup.enter="doRegister">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" v-model="authForm.password" placeholder="密码" @keyup.enter="doRegister">
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn" @click="showRegister = false">取消</button>
+                        <button class="btn btn-primary" @click="doRegister">注册</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 已登录状态 -->
+        <template v-else>
+            <div v-if="view === 'list'" class="container">
+                <h1>Todo (Vue 版 - 外部客人)</h1>
+                <div class="user-bar">
+                    <span>欢迎，{{ '{{' }} currentUser.username {{ '}}' }} ({{ '{{' }} currentUser.role {{ '}}' }})</span>
+                    <button class="btn btn-sm" @click="doLogout">退出</button>
+                </div>
+
+                <div class="toolbar">
+                    <button class="btn btn-primary" @click="view = 'add'">+ 新增</button>
+                </div>
+
+                <div v-if="todos.length === 0" class="empty">
+                    暂无待办事项，点击「+ 新增」添加
+                </div>
+
+                <ul class="todo-list">
+                    <li v-for="todo in todos" :key="todo.id"
+                        :class="{ done: todo.status === 1 }">
+                        <span class="info" @click="toggleDone(todo.id)">
+                            {{ '{{' }} todo.info {{ '}}' }}
+                        </span>
+                        <span class="actions">
+                            <button class="btn btn-sm" @click="editTodo(todo)">
+                                ✏️
+                            </button>
+                            <button class="btn btn-sm btn-danger" @click="deleteTodo(todo.id)">
+                                🗑️
+                            </button>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <div v-if="view === 'add'" class="container">
+                <h1>新增待办</h1>
+                <div class="form-group">
+                    <textarea v-model="form.info" placeholder="请输入待办内容..." rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button class="btn" @click="view = 'list'">取消</button>
+                    <button class="btn btn-primary" @click="saveAdd">保存</button>
+                </div>
+            </div>
+
+            <div v-if="view === 'edit'" class="container">
+                <h1>编辑待办</h1>
+                <div class="form-group">
+                    <textarea v-model="form.info" placeholder="请输入待办内容..." rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button class="btn" @click="view = 'list'">取消</button>
+                    <button class="btn btn-primary" @click="saveEdit">更新</button>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+</body>
+</html>
