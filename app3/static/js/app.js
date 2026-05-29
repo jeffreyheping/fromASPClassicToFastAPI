@@ -20,9 +20,10 @@ createApp({
         };
     },
     mounted() {
-        // 检查本地存储的token
+        // 检查本地存储的token — 乐观设置，避免刷新时闪现登录页
         const token = localStorage.getItem('token');
         if (token) {
+            this.isLoggedIn = true;
             this.validateToken(token);
         }
     },
