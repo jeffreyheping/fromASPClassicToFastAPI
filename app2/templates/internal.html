@@ -10,7 +10,15 @@
 </head>
 <body>
     <div class="container">
-        <h1>Todo (HTMX 版 - 内部员工)</h1>
+        <div class="header-bar">
+            <h1>Todo (HTMX 版 - 内部员工)</h1>
+            <div class="user-info">
+                <span>{{ username }} ({{ role }})</span>
+                <form action="/auth/logout" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-sm">退出</button>
+                </form>
+            </div>
+        </div>
 
         <form class="add-form"
               hx-post="/todos"

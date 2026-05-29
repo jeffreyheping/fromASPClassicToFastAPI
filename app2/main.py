@@ -54,13 +54,15 @@ def index_vue(request: Request):
 def index_internal(
     request: Request,
     db: Session = Depends(get_db),
-    _user: dict = Depends(get_current_user_session),
+    user: dict = Depends(get_current_user_session),
 ):
     """内部员工入口 - HTMX 页面（需要Session登录）"""
     todos = services.get_all(db)
     return templates.TemplateResponse("internal.html", {
         "request": request,
         "todos": todos,
+        "username": user["username"],
+        "role": user["role"],
     })
 
 
