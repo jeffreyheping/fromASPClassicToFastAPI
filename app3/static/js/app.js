@@ -64,6 +64,7 @@ createApp({
                     headers: { 'Authorization': `Bearer ${token}` },
                 });
                 if (res.ok) {
+                    this.isLoggedIn = true;
                     this.currentUser = await res.json();
                     // staff角色跳转到HTMX版
                     if (this.currentUser.role === 'staff') {
