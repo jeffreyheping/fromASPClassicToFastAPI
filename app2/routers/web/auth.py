@@ -83,7 +83,11 @@ def register(
     request.session["username"] = user.username
     request.session["role"] = user.role
 
-    return RedirectResponse(url="/", status_code=302)
+    # 根据角色跳转（与登录逻辑保持一致）
+    if user.role == "staff":
+        return RedirectResponse(url="/internal", status_code=302)
+    else:
+        return RedirectResponse(url="/", status_code=302)
 
 
 @router.post("/logout")
