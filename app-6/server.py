@@ -37,6 +37,9 @@ conn.close()
 # ---- FastAPI 应用 ----
 app = FastAPI(title="app-6 退无可退版")
 
+# ---- 静态文件（必须在模板路由之前挂载）----
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
 # ---- 路由：一个兜底处理所有请求 ----
 # URL 直接映射到 templates/ 下的 .mako 文件
 # /list     -> templates/list.mako
@@ -51,6 +54,10 @@ async def root(request: Request):
 @app.get("/{path:path}", response_class=HTMLResponse)
 @app.post("/{path:path}", response_class=HTMLResponse)
 async def page(request: Request, path: str):
+    # 排除 static 路径（让 StaticFiles 处理）
+    if path.startswith("static/"):
+        return HTMLResponse(f"<h1>404 Not Found: /{path}</h1>", status_code=404)
+    
     # 空路径处理
     if not path:
         path = "index"
@@ -93,6 +100,3 @@ async def page(request: Request, path: str):
         return RedirectResponse(e.url, status_code=303)
 
     return HTMLResponse(html)
-
-# ---- 静态文件 ----
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
