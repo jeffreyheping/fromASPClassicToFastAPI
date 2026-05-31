@@ -6,7 +6,7 @@
 
 ## 项目简介
 
-本项目是 [fromASPClassicToPy4web](https://github.com/jeffreyheping/fromASPClassicToPy4web) 的 FastAPI 移植版本，用同一个 Todo 应用演示从传统 Web 开发到现代前后端分离 + 认证 + 测试的完整演进路径。
+本项目是 [fromASPClassicToPy4web](https://github.com/jeffreyheping/fromASPClassicToPy4web) 的 FastAPI 移植版本，用同一个 Todo 应用演示从传统 Web 开发到现代前后端分离的完整演进路径。
 
 **核心理念**：先退化到 ASP Classic 的手感，再掉头进化到现代写法。
 
@@ -16,94 +16,51 @@
 
 ```
 fromASPClassicToFastAPI/
-├── app-2/                   # 阶段 1 — 纯 Web，整页刷新（端口 8002）
-├── app-1/                   # 阶段 2 — HTMX 服务端渲染（端口 8003）
-├── app/                     # 阶段 3 — Vue.js 前后端分离（端口 8000）
-├── app1/                    # 阶段 4 — 双 UI 合并（端口 8005）
-├── app3/                    # 阶段 5 — 双 UI + OAuth2 认证（端口 8007）
-├── app4/                    # 阶段 6 — 双 UI + OAuth2 认证 + 测试（端口 8008）
+├── app-6/                   # 退无可退 — 最原始 Web 开发（端口 8006）
+├── app-5/                   # 路由分离 — 代码开始分层（计划中）
+├── app-4/                   # ORM 引入 — 告别裸 SQL（计划中）
+├── app-2/                   # 现代基础 — 标准分层架构（端口 8002）
+├── app-1/                   # HTMX 局部刷新（端口 8003）
+├── app/                     # Vue.js 前后端分离（端口 8000）
+├── app+1/                   # 前后端彻底分离（端口 8008）
 ├── requirements.txt         # 锁定版本的依赖清单
 └── README.md                # 本文件
 ```
+
+> **注**：app1、app3、app4 已放弃，不再维护。
 
 ---
 
 ## 演进路线
 
+### 已完成
+
 ```
-app-2/ (纯 Web，整页刷新)            ← 最接近 ASP Classic
+app-6/  (Mako 模板即路由 + 裸 SQL)     ← 退化终点，ASP Classic 手感
   ↓
-app-1/ (HTMX，局部刷新)              ← 零 JS 的体验升级
+app-5/  (路由分离，模板不写代码)        ← 计划中
   ↓
-app/   (Vue.js，前后端分离)           ← 现代 SPA
+app-4/  (SQLAlchemy ORM + Jinja2)      ← 计划中
   ↓
-app1/  (双 UI 合并)                  ← 共享层抽象
+app-2/  (标准分层：config/database/models/routers)
   ↓
-app3/  (双 UI + OAuth2 认证)         ← 安全
+app-1/  (HTMX，局部刷新)
   ↓
-app4/  (双 UI + OAuth2 + 测试)       ← 质量保证
+app/    (Vue.js，前后端分离)
+  ↓
+app+1/  (前后端彻底分离：FastAPI + Vue/Vite)
 ```
 
----
+### 各版本对比
 
-## 五个版本对比
-
-| | app-2/ | app-1/ | app/ | app1/ | app3/ | app4/ |
-|---|--------|--------|------|-------|-------|-------|
-| **架构** | 纯 Web，整页刷新 | HTMX 局部刷新 | 前后端分离 | 双 UI 合并 | 双 UI + 认证 | 双 UI + 认证 + 测试 |
-| **前端** | 无 | HTMX | Vue.js 3 | Vue + HTMX | Vue + HTMX | Vue + HTMX |
-| **认证** | 无 | 无 | 无 | 无 | OAuth2 JWT + Session | OAuth2 JWT + Session |
-| **测试** | 无 | 无 | 无 | 无 | 无 | pytest（23 项） |
-| **端口** | 8002 | 8003 | 8000 | 8005 | 8007 | 8008 |
-| **数据库** | todo-2.db | todo_htmx.db | todo.db | todo_api.db | todo3.db | todo4.db |
-
-### 阶段 1：纯 Web（app-2/）
-
-没有任何前端框架。每个操作都是传统的 HTTP 请求 → 服务端处理 → 整页刷新。这就是 ASP Classic / PHP 时代最原始的 Web 交互方式。
-
-**教学价值**：让孩子理解"没有 AJAX 的 Web 是什么体验"——每次点击都伴随页面闪烁和滚动位置丢失。
-
-### 阶段 2：HTMX 局部刷新（app-1/）
-
-不写一行 JavaScript，仅在 HTML 上加 `hx-*` 属性就实现 AJAX 局部刷新。从纯 Web 到 HTMX 只需改模板——后端代码结构不变。
-
-**核心变化**：操作后返回 HTML 片段而非整页，HTMX 自动替换 DOM，页面不再闪烁。
-
-### 阶段 3：Vue.js SPA（app/）
-
-前后端完全分离。前端用 Vue.js 3 构建，通过 JSON API 与后端通信。后端不再返回 HTML，只返回 JSON。
-
-**教学价值**：对比 app-1 (HTMX)，理解「数据驱动 UI」和「组件化」的优势。
-
-### 阶段 4：合并共享层（app1/）
-
-把 app/ 和 app-1/ 合并成一个项目，共享同一套 services/database/models。用文件夹结构演示「关注点分离」——Vue 和 HTMX 只在自己的 router 层不同，底层完全共享。
-
-**核心变化**：
-- 抽离 `core/services.py`（6 个纯函数，零 HTTP 依赖）
-- `routers/api/` 返回 JSON，`routers/web/` 返回 HTML 片段
-- CSS 拆分为 base.css + app.css + internal.css
-- 用 `Path(__file__).resolve()` 替代硬编码相对路径
-
-### 阶段 5：加入认证（app3/）
-
-在 app1 的基础上加入完整的认证体系。Vue 端采用 OAuth2 标准 JWT 认证，HTMX 端采用 Session 认证，Swagger UI 原生支持一键登录。
-
-**核心特性**：
-- OAuth2PasswordBearer + python-jose JWT
-- 角色分流：guest → Vue 端，staff → HTMX 端
-- 401 未登录时浏览器自动重定向到登录页
-- Swagger UI 自动显示 🔒 图标
-
-### 阶段 6：加入测试（app4/）
-
-在 app3 的基础上增加完整的自动化测试体系，展示如何让现有代码「可测试」——只改最少的东西（配置环境变量 + 工厂函数），不动业务逻辑。
-
-**核心变化**：
-- `config.py` 支持环境变量覆盖
-- `main.py` 改为 `create_app()` 工厂函数
-- 23 个 pytest 测试（services 层 + API 层）
-- in-memory SQLite + `dependency_overrides` 实现测试隔离
+| | app-6/ | app-2/ | app-1/ | app/ | app+1/ |
+|---|--------|--------|--------|------|--------|
+| **架构** | 模板即路由 | 标准分层 | HTMX 局部刷新 | 前后端分离 | 彻底分离 |
+| **模板引擎** | Mako | Jinja2 | Jinja2 | Jinja2 (CDN Vue) | Vue + Vite |
+| **数据库** | sqlite3 裸 SQL | SQLAlchemy ORM | SQLAlchemy ORM | SQLAlchemy ORM | SQLAlchemy ORM |
+| **认证** | 无 | 无 | 无 | 无 | 无 |
+| **端口** | 8006 | 8002 | 8003 | 8000 | 8010 |
+| **数据库文件** | todo-6.db | todo-2.db | todo_htmx.db | todo.db | todo+1.db |
 
 ---
 
@@ -115,80 +72,27 @@ app4/  (双 UI + OAuth2 + 测试)       ← 质量保证
 pip install -r requirements.txt --break-system-packages
 ```
 
-### 运行各阶段
+### 运行各版本
 
 ```bash
-# 阶段 1 — 纯 Web 版（整页刷新）
+# app-6 — 退无可退版（最原始）
+uvicorn app-6.server:app --host 0.0.0.0 --port 8006 --reload
+
+# app-2 — 标准分层版
 uvicorn app-2.main:app --host 0.0.0.0 --port 8002 --reload
 
-# 阶段 2 — HTMX 版（局部刷新）
+# app-1 — HTMX 版
 uvicorn app-1.main:app --host 0.0.0.0 --port 8003 --reload
 
-# 阶段 3 — Vue.js 版（前后端分离）
+# app — Vue.js 版
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
-# 阶段 4 — 双 UI 合并
-uvicorn app1.main:app --host 0.0.0.0 --port 8005 --reload
-
-# 阶段 5 — 双 UI + 认证
-uvicorn app3.main:app --host 0.0.0.0 --port 8007 --reload
-
-# 阶段 6 — 双 UI + 认证 + 测试
-uvicorn app4.main:app --host 0.0.0.0 --port 8008 --reload
+# app+1 — 前后端彻底分离
+# 后端
+uvicorn app+1.backend.main:app --host 0.0.0.0 --port 8009 --reload
+# 前端
+cd app+1/frontend && npm run dev
 ```
-
-### 运行测试（app4 专属）
-
-```bash
-pytest app4/tests/ -v
-```
-
----
-
-## 技术栈（版本已锁定）
-
-### 阶段 1-2 — Web 基础（app-2/, app-1/, app/）
-
-| 组件 | 版本 | 说明 |
-|------|------|------|
-| FastAPI | 0.115.0 | Web 框架 |
-| Uvicorn | 0.32.0 | ASGI 服务器 |
-| SQLAlchemy | 2.0.36 | ORM |
-| Pydantic | 2.9.2 | 数据验证 |
-| Jinja2 | 3.1.2 | 模板引擎 |
-| Starlette | 0.38.6 | ASGI 工具集 |
-| python-multipart | 0.0.29 | 表单解析（app-2/ 表单引入） |
-| Vue.js 3 | CDN | SPA 前端（app/ 引入） |
-| HTMX | 1.9.10 | 局部刷新（app-1/ 引入） |
-
-### 阶段 5 — 认证（app3/, app4/）
-
-| 组件 | 版本 | 说明 |
-|------|------|------|
-| python-jose | 3.5.0 | JWT 生成/验证 |
-| passlib | 1.7.4 | 密码哈希 |
-| bcrypt | 4.0.1 | bcrypt 算法后端 |
-
-### 阶段 6 — 测试（app4/）
-
-| 组件 | 版本 | 说明 |
-|------|------|------|
-| pytest | 9.0.3 | 测试框架 |
-| httpx | 0.28.1 | HTTP 客户端（TestClient 依赖） |
-| Vue.js 3 | CDN | SPA 前端 |
-| HTMX | 1.9.10 | 局部刷新 |
-
----
-
-## 教学价值
-
-每条线的跨度都不大，但每步都踩在特定的教学点上：
-
-1. **app-2 → app-1/**：同一后端，加了 HTMX 属性就实现局部刷新——零 JS
-2. **app-1 → app/**：从 HTML 片段到 JSON API——理解前后端分离的本质
-3. **app + app-1 → app1/**：「为什么重复代码是坏味道」→ 抽离共享层
-4. **app1 → app3/**：「无认证的应用不是真实应用」→ OAuth2 + Session
-5. **app3 → app4/**：「没有测试的代码不能放心改」→ pytest + 工厂函数
 
 ---
 
@@ -196,12 +100,11 @@ pytest app4/tests/ -v
 
 | 版本 | 文档 | 核心主题 |
 |------|------|---------|
-| app-2/ | [app-2/README.md](app-2/README.md) | 纯 Web，整页刷新——最接近 ASP Classic |
-| app-1/ | [app-1/README.md](app-1/README.md) | HTMX 局部刷新——零 JS 的体验升级 |
-| app/ | [app/README.md](app/README.md) | Vue.js 前后端分离——现代 SPA |
-| app1/ | [app1/README.md](app1/README.md) | 分层架构与代码复用 |
-| app3/ | [app3/README.md](app3/README.md) | OAuth2 JWT + Session 双认证 |
-| app4/ | [app4/README.md](app4/README.md) | pytest 测试 + 工厂函数 |
+| app-6/ | [app-6/README.md](app-6/README.md) | 退无可退 — Mako 模板即路由 + 裸 SQL |
+| app-2/ | [app-2/README.md](app-2/README.md) | 标准分层 — config/database/models/routers |
+| app-1/ | [app-1/README.md](app-1/README.md) | HTMX — 零 JS 局部刷新 |
+| app/ | [app/README.md](app/README.md) | Vue.js — 前后端分离 |
+| app+1/ | [app+1/README.md](app+1/README.md) | 彻底分离 — FastAPI + Vue/Vite |
 
 ---
 
@@ -209,7 +112,6 @@ pytest app4/tests/ -v
 
 - [jeffreyheping](https://github.com/jeffreyheping) — 原 py4web 进化课程作者
 - [Sebastián Ramírez](https://github.com/tiangolo) — FastAPI 作者
-- [HTMX](https://htmx.org/) — 极简的交互设计哲学
 
 ---
 
