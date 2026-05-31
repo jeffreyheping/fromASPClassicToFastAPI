@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑待办 - 路由分离版</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>编辑待办</h1>
+
+        <!-- 编辑表单 — 普通 HTML form -->
+        <form action="/todos/{{ todo.id }}" method="POST">
+            <div class="form-group">
+                <input type="text" name="info" value="{{ todo.info }}" required autofocus
+                       class="full-width">
+            </div>
+            <div class="form-actions">
+                <a href="/" class="btn">取消</a>
+                <button type="submit" class="btn btn-primary">保存</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

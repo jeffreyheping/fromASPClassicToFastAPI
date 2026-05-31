@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - 路由分离版</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>待办事项（路由分离版）</h1>
+
+        <!-- 新增表单 — 普通 HTML form，无 JS -->
+        <form class="add-form" action="/todos" method="POST">
+            <input type="text" name="info" placeholder="输入待办事项..." required>
+            <button type="submit" class="btn btn-primary">+ 新增</button>
+        </form>
+
+        <!-- 待办列表 — 纯 HTML -->
+        {% if todos %}
+        <ul class="todo-list">
+            {% for todo in todos %}
+            <li class="{% if todo.status == 1 %}done{% endif %}">
+                <span class="info">
+                    <a href="/todos/{{ todo.id }}/toggle">
+                        {{ todo.info }}
+                    </a>
+                </span>
+                <span class="actions">
+                    <a href="/todos/{{ todo.id }}/edit" class="btn btn-sm">✏️</a>
+                    <a href="/todos/{{ todo.id }}/delete"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('确定要删除吗？')">🗑️</a>
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="empty">暂无待办事项，在上方输入框添加</div>
+        {% endif %}
+    </div>
+
+    <!-- 说明 -->
+    <div class="info-box">
+        <strong>路由分离版原理说明：</strong><br>
+        这一步把 SQL 从 Mako 模板里抽了出来，放到了 <code>routers/todos.py</code> 的路由函数里。<br>
+        模板不再写 Python 代码，只用 Jinja2 的 <code>{% raw %}{% %}{% endraw %}</code> 语法做渲染。<br>
+        数据库访问仍然用 raw sqlite3——下一站 <a href="http://localhost:8002">app-2 (纯 Web + ORM)</a> 才会引入 SQLAlchemy。<br>
+        回看起点：<a href="http://localhost:8006/list">app-6 (模板即路由)</a> 感受「关注点分离」带来的清爽。
+    </div>
+</body>
+</html>
