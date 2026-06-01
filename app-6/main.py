@@ -2,7 +2,7 @@
 """
 app-6 — 退无可退版：Mako模板即路由 + sqlite3裸SQL
 
-server.py 写一次就不改。
+main.py 写一次就不改。
 新增页面只需在 templates/ 下放 .mako 文件，刷新浏览器即可。
 
 模板内可用的变量：
@@ -18,11 +18,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from mako.template import Template
 
-# ---- 配置 ----
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "todo-6.db")
-TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
-STATIC_DIR = os.path.join(BASE_DIR, "static")
+from .config import DB_PATH, TEMPLATE_DIR, STATIC_DIR
 
 # ---- 初始化数据库 ----
 conn = sqlite3.connect(DB_PATH)

@@ -10,8 +10,8 @@ app-6 → app-5 → app-2 → app-1 → app → app+1
 
 | 版本 | 端口 | 数据库 | 核心特征 | 启动命令 |
 |------|------|--------|---------|---------|
-| app-6 | 8006 | todo-6.db | Mako 模板即路由，单文件 server.py | `uvicorn app-6.server:app --host 0.0.0.0 --port 8006 --reload`（需 cd 到 app-6 目录） |
-| app-5 | 8005 | todo-5.db | 路由分离 + Jinja2 + raw sqlite3 | `uvicorn app-5.main:app --host 0.0.0.0 --port 8005 --reload` |
+| app-6 | 8006 | todo-6.db（根目录） | Mako 模板即路由，main.py + config.py | `uvicorn app-6.main:app --host 0.0.0.0 --port 8006 --reload` |
+| app-5 | 8005 | todo-5.db（根目录） | 路由分离 + Jinja2 + raw sqlite3 | `uvicorn app-5.main:app --host 0.0.0.0 --port 8005 --reload` |
 | app-2 | 8002 | todo-2.db | 纯 Web 整页刷新 + ORM | `uvicorn app-2.main:app --host 0.0.0.0 --port 8002 --reload` |
 | app-1 | 8003 | todo_htmx.db | HTMX 局部刷新 | `uvicorn app-1.main:app --host 0.0.0.0 --port 8003 --reload` |
 | app | 8000 | todo.db | Vue.js SPA 前后端分离 | `uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload` |

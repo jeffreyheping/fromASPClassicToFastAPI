@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>新增待办</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
     <h1>新增待办</h1>

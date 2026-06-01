@@ -2,4 +2,5 @@
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "todo-5.db")
+ROOT_DIR = os.path.dirname(BASE_DIR)
+DB_PATH = os.path.join(ROOT_DIR, "todo-5.db")

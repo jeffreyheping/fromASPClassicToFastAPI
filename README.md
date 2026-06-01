@@ -80,7 +80,7 @@ app+3/  (FastAPI + Nuxt 4，SSR)                            🚧 预告
 | **端口** | 8006 | 8005 | 8002 | 8003 | 8000 | 8010+5173 | 8012+3000 |
 | **数据库文件** | todo-6.db | todo-5.db | todo-2.db | todo_htmx.db | todo.db | todo+1.db | todo+3.db |
 | **模板文件** | 9 个 .mako | 2 个 .html | 2 个 .html | 3 个 .html | 1 个 .html | 0 | 0 |
-| **入口文件** | server.py | main.py | main.py | main.py | main.py | backend/main.py | backend/main.py |
+| **入口文件** | main.py | main.py | main.py | main.py | main.py | backend/main.py | backend/main.py |
 
 ---
 
@@ -88,7 +88,7 @@ app+3/  (FastAPI + Nuxt 4，SSR)                            🚧 预告
 
 ### 第 1 步：app-6/ — 退无可退
 
-Mako 模板引擎，一个 `server.py` 搞定一切。URL 直接映射到模板文件，业务逻辑（Python + SQL）全写在 `.mako` 模板里。这是 ASP Classic / 早期 PHP 时代的真实写法。
+Mako 模板引擎，一个 `main.py` 搞定一切。URL 直接映射到模板文件，业务逻辑（Python + SQL）全写在 `.mako` 模板里。这是 ASP Classic / 早期 PHP 时代的真实写法。
 
 > **为什么是 Mako，不是 Jinja2？**
 >
@@ -186,7 +186,7 @@ pip install -r requirements.txt --break-system-packages
 
 ```bash
 # 第 1 步：退无可退（Mako 模板即路由）
-uvicorn app-6.server:app --host 0.0.0.0 --port 8006 --reload
+uvicorn app-6.main:app --host 0.0.0.0 --port 8006 --reload
 
 # 第 2 步：路由分离（Jinja2 + raw SQL）
 uvicorn app-5.main:app --host 0.0.0.0 --port 8005 --reload
@@ -200,17 +200,11 @@ uvicorn app-1.main:app --host 0.0.0.0 --port 8003 --reload
 # 第 5 步：Vue.js 前后端分离
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
-# 第 6 步：前后端彻底分离（两个终端）
-# 后端：
-uvicorn app+1.backend.main:app --host 0.0.0.0 --port 8010 --reload
-# 前端：
-cd app+1/frontend && npm run dev
+# 第 6 步：前后端彻底分离
+# 见 app+1/README.md
 
-# 第 7 步：FastAPI + Nuxt 🚧（两个终端）
-# 后端：
-uvicorn app+3.backend.main:app --host 0.0.0.0 --port 8012 --reload
-# 前端：
-cd app+3/frontend && npm run dev
+# 第 7 步：FastAPI + Nuxt 🚧
+# 见 app+3/README.md
 ```
 
 ---

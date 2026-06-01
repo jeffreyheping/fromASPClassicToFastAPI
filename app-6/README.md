@@ -27,7 +27,8 @@ Mako 则没有这个限制——`<% %>` 里可以写任意 Python 语句。这�
 
 ```
 app-6/
-├── server.py              # 写一次不改：模板即路由核心
+├── main.py                # 写一次不改：模板即路由核心
+├── config.py              # 配置（路径常量）
 ├── templates/             # 所有页面都在这里
 │   ├── index.mako         # / 首页（重定向）
 │   ├── list.mako          # /list 待办列表
@@ -40,18 +41,18 @@ app-6/
 │   └── ...
 ├── static/
 │   └── style.css          # 样式
-├── todo-6.db              # SQLite 数据库（运行后生成）
 └── README.md
 ```
 
-**注意**：没有 `config.py`、没有 `db.py`、没有 `models.py`、没有 `routers/`。
-一切都在 `server.py` 和 `templates/` 里。
+**注意**：没有 `db.py`、没有 `models.py`、没有 `routers/`。
+数据库文件 `todo-6.db` 存放在**根目录**。
+一切业务逻辑都在 `templates/` 里，`main.py` 是黑盒，写一次不改。
 
 ---
 
 ## 核心设计
 
-### server.py — 写一次不改
+### main.py — 写一次不改
 
 ```python
 # URL 直接映射到 templates/ 下的 .mako 文件
@@ -112,7 +113,7 @@ pip install fastapi uvicorn mako python-multipart --break-system-packages
 ### 2. 运行
 
 ```bash
-uvicorn server:app --port 8006 --reload
+uvicorn app-6.main:app --port 8006 --reload
 ```
 
 ### 3. 访问
@@ -126,7 +127,7 @@ uvicorn server:app --port 8006 --reload
 ## 开发流程
 
 ```
-1. server.py 写一次，不再改
+1. main.py 写一次，不再改
 2. 在 templates/ 下新增 .mako 文件
 3. 刷新浏览器，立即生效（无需重启）
 ```
@@ -181,7 +182,7 @@ EOF
 1. **感受原始开发**：没有 ORM、没有验证框架、没有类型提示
 2. **模板即路由**：最直观的路由理解方式
 3. **SQL 裸写**：理解 ORM 背后的真实操作
-4. **server.py 写一次不改**：体会"约定优于配置"
+4. **main.py 写一次不改**：体会"约定优于配置"
 
 ---
 
