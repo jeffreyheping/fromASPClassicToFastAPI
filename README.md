@@ -22,11 +22,12 @@ fromASPClassicToFastAPI/
 ├── app-1/                   # 第 4 步 — HTMX 局部刷新（端口 8003）
 ├── app/                     # 第 5 步 — Vue.js 前后端分离（端口 8000）
 ├── app+1/                   # 第 6 步 — 前后端彻底分离（端口 8010 + 5173）
-├── app+3/                   # 第 7 步 — FastAPI + Nuxt（端口 8012 + 3000）🚧 预告
+├── app+3/                   # 第 7 步 — FastAPI + Nuxt 4 SSR（端口 8012 + 3000）
+├── [Abandon]/               # 旧版本，已废弃
 └── requirements.txt         # 锁定版本的依赖清单
 ```
 
-> 注：`[Abandon]app1/`、`[Abandon]app2/`、`[Abandon]app3/`、`[Abandon]app4/` 是旧版本，已废弃，不在本轮教学范围内。
+> 注：`[Abandon]/` 下的 app1~app4 是早期版本，已不在本轮教学范围内。
 
 ---
 
@@ -56,9 +57,9 @@ app/    (Vue.js 前后端分离 + Pydantic schemas)
   ↓
 app+1/  (彻底分离：FastAPI API + Vue/Vite)
   │
-  │  Vue/Vite 换成 Nuxt 4，加 SSR + 文件路由 + auto-import
+  │  Vue/Vite 换成 Nuxt 4，加 SSR + 文件路由 + BFF 代理
   ↓
-app+3/  (FastAPI + Nuxt 4，SSR)                            🚧 预告
+app+3/  (FastAPI + Nuxt 4，SSR + BFF)                  ← 现代终点
 ```
 
 **设计原则**：每一步只变一个维度。学生先看到问题，再看到解法，不会一次面对太多新概念。
@@ -67,18 +68,18 @@ app+3/  (FastAPI + Nuxt 4，SSR)                            🚧 预告
 
 ## 七版本对比
 
-| | app-6 | app-5 | app-2 | app-1 | app | app+1 | app+3 🚧 |
-|---|-------|-------|-------|-------|-----|-------|----------|
+| | app-6 | app-5 | app-2 | app-1 | app | app+1 | app+3 |
+|---|-------|-------|-------|-------|-----|-------|-------|
 | **一句话** | 模板即路由 | 路由分离 | ORM 引入 | 局部刷新 | 前后端分离 | 彻底分离 | Nuxt SSR |
 | **模板引擎** | Mako | Jinja2 | Jinja2 | Jinja2 | Jinja2+Vue | 无模板 | 无模板 |
 | **数据库访问** | sqlite3 裸 SQL | sqlite3 裸 SQL | SQLAlchemy ORM | SQLAlchemy ORM | SQLAlchemy ORM | SQLAlchemy ORM | SQLAlchemy ORM |
 | **前端技术** | 无 | 无 | 无 | HTMX (CDN) | Vue.js (CDN) | Vue+Vite (npm) | Nuxt 4 (npm) |
 | **刷新方式** | 整页 | 整页 | 整页 | 局部 | SPA | SPA | SSR+SPA |
 | **Pydantic** | 无 | 无 | 无 | 无 | 有 | 有 | 有 |
-| **CORS** | 无 | 无 | 无 | 无 | 无 | 有 | 有 |
+| **CORS** | 无 | 无 | 无 | 无 | 无 | 有 | 无（BFF 同源） |
 | **进程数** | 1 | 1 | 1 | 1 | 1 | 2 | 2 |
 | **端口** | 8006 | 8005 | 8002 | 8003 | 8000 | 8010+5173 | 8012+3000 |
-| **数据库文件** | todo-6.db | todo-5.db | todo-2.db | todo-1.db | todo.db | todo+1.db | — |
+| **数据库文件** | todo-6.db | todo-5.db | todo-2.db | todo-1.db | todo.db | todo+1.db | todo+3.db |
 | **模板文件** | 9 个 .mako | 2 个 .html | 2 个 .html | 3 个 .html | 1 个 .html | 0 | 0 |
 | **入口文件** | main.py | main.py | main.py | main.py | main.py | backend/main.py | backend/main.py |
 
@@ -126,11 +127,11 @@ SQL 从 9 个 Mako 模板里抽到 `routers/todos.py`，模板换成 Jinja2，�
 
 **教学价值**：从「单体」到「分离部署」的最后一步。npm 生态、Vite 工具链、CORS 跨域——真实项目的样子。
 
-### 第 7 步：app+3/ — Nuxt 4 全栈 🚧 预告
+### 第 7 步：app+3/ — Nuxt 4 SSR + BFF
 
-前端从 Vue/Vite 升级到 Nuxt 4。后端 FastAPI 不变，前端获得 SSR（首屏秒开、SEO 友好）、文件系统路由（零配置）、auto-import（少写 import）。同一个 Todo 应用，体验从「白屏等待」到「服务端直出完整 HTML」。
+前端从 Vue/Vite 升级到 Nuxt 4。后端 FastAPI 不变，前端获得 SSR（首屏秒开、SEO 友好）、文件系统路由（零配置）、auto-import（少写 import）、BFF 代理层（同源无 CORS）。同一个 Todo 应用，体验从「白屏等待」到「服务端直出完整 HTML」。
 
-**教学价值**：从「手动搭建前端」到「用前端框架」。理解 CSR vs SSR 的本质差异、Nuxt 的约定优于配置、以及「框架帮你省掉了什么」。
+**教学价值**：从「手动搭建前端」到「用前端框架」。理解 CSR vs SSR 的本质差异、Nuxt 的约定优于配置、BFF 层解决了什么问题、以及「框架帮你省掉了什么」。
 
 ---
 
@@ -165,18 +166,19 @@ SQL 从 9 个 Mako 模板里抽到 `routers/todos.py`，模板换成 Jinja2，�
 | Vue.js | ^3.5.34 | SPA 框架（npm 管理） |
 | Vite | ^8.0.12 | 构建工具 |
 
-### 第 7 步（app+3/）🚧
+### 第 7 步（app+3/）
 
 | 组件 | 版本 | 说明 |
 |------|------|------|
-| Nuxt | 4.x | 全栈 Vue 框架（SSR/SSG/CSR） |
-| @nuxt/ui | — | UI 组件库（待定 v2/v3） |
+| Nuxt | 3.x | 全栈 Vue 框架（SSR/SSG/CSR） |
+| TypeScript | ^5.6.0 | 类型系统 |
+| Node.js | 20+ | 运行时环境 |
 
 ---
 
 ## 快速开始
 
-### 安装依赖
+### 安装 Python 依赖
 
 ```bash
 pip install -r requirements.txt --break-system-packages
@@ -203,7 +205,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 # 第 6 步：前后端彻底分离
 # 见 app+1/README.md
 
-# 第 7 步：FastAPI + Nuxt 🚧
+# 第 7 步：FastAPI + Nuxt 4 SSR
 # 见 app+3/README.md
 ```
 
@@ -219,7 +221,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 | app-1/ | [app-1/README.md](app-1/README.md) | HTMX — 零 JS 局部刷新 |
 | app/ | [app/README.md](app/README.md) | Vue.js — 前后端分离 |
 | app+1/ | [app+1/README.md](app+1/README.md) | 彻底分离 — FastAPI + Vue/Vite |
-| app+3/ 🚧 | [app+3/README.md](app+3/README.md) | Nuxt 4 — SSR + 文件路由 + auto-import |
+| app+3/ | [app+3/README.md](app+3/README.md) | Nuxt 4 — SSR + 文件路由 + BFF |
 
 ---
 
