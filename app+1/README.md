@@ -214,7 +214,7 @@ npm run build
 
 ## 下一章
 
-`app+2/` 或 `app6/` — 引入 **Nuxt.js**，服务端渲染（SSR）与静态生成（SSG）。
+[app+3/](../app+3/README.md) — 引入 **Nuxt 4**，服务端渲染（SSR）与文件系统路由。
 
 ---
 

@@ -13,6 +13,12 @@
 - **纯 SQL 操作**：sqlite3 标准库，无 ORM
 - **无 Pydantic、无 SQLAlchemy、无路由装饰器**
 
+### 为什么用 Mako，而不是 FastAPI 默认的 Jinja2？
+
+关键的工程技术原因：**Jinja2 刻意不支持在模板里写 Python 代码**。它的设计哲学是"模板只做展示"，代码块（`{% %}`）仅限控制流和变量操作，你不能写 `import sqlite3` 或 `conn.execute()`。
+
+Mako 则没有这个限制——`<% %>` 里可以写任意 Python 语句。这让 app-6 的"模板即路由"风格成为可能：每个页面在自己的 `.mako` 文件里完成数据库连接、SQL 执行、结果渲染，全过程无需离开模板文件。如果换成 Jinja2，SQL 只能写到 `server.py` 的路由函数里——但那正是 app-5 要做的进化。
+
 与 [Py4web 的 todo_classic_-2](https://github.com/jeffreyheping/fromASPClassicToPy4web/tree/main/apps/todo_classic_-2) 理念一致，但用 FastAPI + Mako 实现。
 
 ---
