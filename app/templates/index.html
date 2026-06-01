@@ -3,60 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App - FastAPI + Vue.js</title>
+    <title>Todo App - Vue.js SPA</title>
     <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
 </head>
 <body>
     <div id="app">
-        <!-- 列表视图 -->
-        <div v-if="view === 'list'" class="container">
-            <h1>📋 待办事项</h1>
+        <div class="container">
+            <h1>📋 待办事项（Vue.js SPA）</h1>
+            <p class="subtitle">Vue 3 接管前端，前后端通过 JSON API 通信</p>
 
-            <div class="toolbar">
-                <button class="btn btn-primary" @click="view = 'add'">+ 新增</button>
+            <!-- 列表视图 -->
+            <div v-if="view === 'list'">
+                <div class="toolbar">
+                    <button class="btn btn-primary" @click="view = 'add'">+ 新增</button>
+                </div>
+
+                <div v-if="todos.length === 0" class="empty">
+                    暂无待办事项，点击「+ 新增」添加
+                </div>
+
+                <ul class="todo-list">
+                    <li v-for="todo in todos" :key="todo.id"
+                        :class="{ done: todo.status === 1 }">
+                        <span class="info" @click="toggleDone(todo.id)">
+                            {{ '{{' }} todo.info {{ '}}' }}
+                        </span>
+                        <span class="actions">
+                            <button class="btn btn-sm" @click="editTodo(todo)">✏️</button>
+                            <button class="btn btn-sm btn-danger" @click="deleteTodo(todo.id)">🗑️</button>
+                        </span>
+                    </li>
+                </ul>
             </div>
 
-            <div v-if="todos.length === 0" class="empty">
-                暂无待办事项，点击「+ 新增」添加
+            <!-- 新增视图 -->
+            <div v-if="view === 'add'">
+                <h2>➕ 新增待办</h2>
+                <div class="form-group">
+                    <textarea v-model="form.info" placeholder="请输入待办内容..." rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button class="btn" @click="view = 'list'">取消</button>
+                    <button class="btn btn-primary" @click="saveAdd">保存</button>
+                </div>
             </div>
 
-            <ul class="todo-list">
-                <li v-for="todo in todos" :key="todo.id"
-                    :class="{ done: todo.status === 1 }">
-                    <span class="info" @click="toggleDone(todo.id)">
-                        {{ '{{' }} todo.info {{ '}}' }}
-                    </span>
-                    <span class="actions">
-                        <button class="btn btn-sm" @click="editTodo(todo)">✏️</button>
-                        <button class="btn btn-sm btn-danger" @click="deleteTodo(todo.id)">🗑️</button>
-                    </span>
-                </li>
-            </ul>
+            <!-- 编辑视图 -->
+            <div v-if="view === 'edit'">
+                <h2>✏️ 编辑待办</h2>
+                <div class="form-group">
+                    <textarea v-model="form.info" placeholder="请输入待办内容..." rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button class="btn" @click="view = 'list'">取消</button>
+                    <button class="btn btn-primary" @click="saveEdit">更新</button>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <!-- 新增视图 -->
-        <div v-if="view === 'add'" class="container">
-            <h1>➕ 新增待办</h1>
-            <div class="form-group">
-                <textarea v-model="form.info" placeholder="请输入待办内容..." rows="3"></textarea>
-            </div>
-            <div class="form-actions">
-                <button class="btn" @click="view = 'list'">取消</button>
-                <button class="btn btn-primary" @click="saveAdd">保存</button>
-            </div>
-        </div>
-
-        <!-- 编辑视图 -->
-        <div v-if="view === 'edit'" class="container">
-            <h1>✏️ 编辑待办</h1>
-            <div class="form-group">
-                <textarea v-model="form.info" placeholder="请输入待办内容..." rows="3"></textarea>
-            </div>
-            <div class="form-actions">
-                <button class="btn" @click="view = 'list'">取消</button>
-                <button class="btn btn-primary" @click="saveEdit">更新</button>
-            </div>
-        </div>
+    <div class="info-box">
+        <strong>💡 Vue.js SPA 版：</strong>
+        Vue 3 单页应用——前端完全接管页面渲染，后端只提供 JSON API。<br>
+        <code>templates/index.html</code> 只剩一个 <code>&lt;div id="app"&gt;</code> 挂载点，业务逻辑全在 <code>app.js</code> 里。<br>
+        下一站：<a href="http://localhost:8010">app+1（Vue + Vite）</a> — 从 CDN 到构建工具链。
     </div>
 
     <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.4.21/vue.global.prod.min.js"></script>

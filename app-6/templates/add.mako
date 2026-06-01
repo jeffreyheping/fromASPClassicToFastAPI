@@ -2,11 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>新增待办</title>
+    <title>Todo App - 模板即路由</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <h1>新增待办</h1>
+<div class="container">
+    <h1>➕ 新增待办</h1>
     
     <form method="POST" action="/add_db">
         <textarea name="info" rows="4" placeholder="输入待办事项..."></textarea>
@@ -15,5 +16,6 @@
             <button type="submit" class="btn btn-primary">保存</button>
         </div>
     </form>
+</div>
 </body>
 </html>

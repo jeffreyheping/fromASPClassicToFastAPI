@@ -11,7 +11,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>📋 待办事项 (HTMX 版)</h1>
+        <h1>📋 待办事项（HTMX 版）</h1>
+        <p class="subtitle">不写一行 JavaScript 的 AJAX——用 HTML 属性实现局部刷新</p>
 
         <!-- 新增表单 -->
         <form class="add-form"
@@ -31,10 +32,11 @@
 
     <!-- 说明 -->
     <div class="info-box">
-        <strong>💡 HTMX 原理说明：</strong><br>
-        这个版本没有使用 Vue.js，而是通过 HTMX 的 <code>hx-*</code> 属性实现局部刷新。<br>
-        点击「完成」「编辑」「删除」时，浏览器发送 AJAX 请求，后端返回 HTML 片段，HTMX 自动替换页面内容。<br>
-        这样孩子们可以先理解「局部刷新」的底层原理，再学习前端框架。
+        <strong>💡 HTMX 版：</strong>
+        不用 Vue.js，通过 HTMX 的 <code>hx-*</code> 属性实现局部刷新。<br>
+        点击操作 → 发 AJAX → 后端返回 HTML 片段 → HTMX 自动替换页面内容。<br>
+        先理解「局部刷新」原理，再学前端框架。<br>
+        下一站：<a href="http://localhost:8000">app（Vue.js SPA）</a> — 前端完全接管页面。
     </div>
 </body>
 </html>

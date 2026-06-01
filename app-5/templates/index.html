@@ -8,7 +8,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>待办事项（路由分离版）</h1>
+        <h1>📋 待办事项（路由分离版）</h1>
+        <p class="subtitle">SQL 从模板抽到路由函数——关注点分离的第一步</p>
 
         <!-- 新增表单 — 普通 HTML form，无 JS -->
         <form class="add-form" action="/todos" method="POST">
@@ -42,11 +43,11 @@
 
     <!-- 说明 -->
     <div class="info-box">
-        <strong>路由分离版原理说明：</strong><br>
-        这一步把 SQL 从 Mako 模板里抽了出来，放到了 <code>routers/todos.py</code> 的路由函数里。<br>
-        模板不再写 Python 代码，只用 Jinja2 的 <code>{% raw %}{% %}{% endraw %}</code> 语法做渲染。<br>
-        数据库访问仍然用 raw sqlite3——下一站 <a href="http://localhost:8002">app-2 (纯 Web + ORM)</a> 才会引入 SQLAlchemy。<br>
-        回看起点：<a href="http://localhost:8006/list">app-6 (模板即路由)</a> 感受「关注点分离」带来的清爽。
+        <strong>💡 路由分离版：</strong>
+        SQL 从 Mako 模板移到了 <code>routers/todos.py</code> 路由函数里。<br>
+        模板不再写 Python 代码，只用 Jinja2 的 <code>{{ "{% %}" }}</code> 语法做渲染。<br>
+        数据库仍用 raw sqlite3 —— 下一站 <a href="http://localhost:8002">app-2（纯 Web + ORM）</a> 引入 SQLAlchemy。<br>
+        回看：<a href="http://localhost:8006/list">app-6（模板即路由）</a> — 体会「关注点分离」。
     </div>
 </body>
 </html>

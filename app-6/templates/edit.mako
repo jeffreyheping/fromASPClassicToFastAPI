@@ -2,11 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>编辑待办</title>
+    <title>Todo App - 模板即路由</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <h1>编辑待办</h1>
+<div class="container">
+    <h1>✏️ 编辑待办</h1>
     
     <%
         todo_id = query.get('id', '')
@@ -28,7 +29,8 @@
         </form>
     % else:
         <p>待办不存在</p>
-        <a href="/list">返回列表</a>
+        <a href="/list" class="btn">返回列表</a>
     % endif
+</div>
 </body>
 </html>

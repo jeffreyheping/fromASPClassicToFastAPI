@@ -118,8 +118,8 @@ export default {
 
 <template>
   <div class="container">
-    <h1>Todo App（Vue + Vite 版）</h1>
-    <p class="subtitle">前后端分离架构演示</p>
+    <h1>📋 待办事项（Vue + Vite 版）</h1>
+    <p class="subtitle">告别 CDN —— 用 Vite 构建工具管理前端工程</p>
 
     <!-- 加载中 -->
     <div v-if="loading" class="loading">加载中...</div>
@@ -179,5 +179,12 @@ export default {
         <button class="btn btn-primary" @click="saveEdit">更新</button>
       </div>
     </div>
+  </div>
+
+  <div class="info-box">
+    <strong>💡 Vue + Vite 版：</strong>
+    告别 CDN 引入，用 Vite 构建工具管理前端工程。<br>
+    <code>.vue</code> 单文件组件、HMR 热更新、npm 依赖管理 —— 现代前端开发的标准姿势。<br>
+    下一站：<a href="#">app+3（FastAPI + Nuxt）</a> — 全栈框架，约定优于配置。
   </div>
 </template>

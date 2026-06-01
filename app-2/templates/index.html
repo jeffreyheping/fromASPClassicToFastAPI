@@ -8,7 +8,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>待办事项（纯 Web 版）</h1>
+        <h1>📋 待办事项（纯 Web 版）</h1>
+        <p class="subtitle">每个操作都整页刷新——ASP Classic 时代的真实体验</p>
 
         <!-- 新增表单 — 普通 HTML form，无 JS -->
         <form class="add-form" action="/todos" method="POST">
@@ -42,12 +43,11 @@
 
     <!-- 说明 -->
     <div class="info-box">
-        <strong>纯 Web 版原理说明：</strong><br>
-        这个版本没有使用任何前端技术（无 Vue、无 HTMX、无 AJAX）。<br>
-        点击「切换」「编辑」「删除」时，浏览器发送普通的 HTTP 请求，服务器处理后重定向回首页，<br>
-        浏览器整页刷新显示新内容。<br>
+        <strong>💡 纯 Web 版：</strong>
+        无前端技术（无 Vue、无 HTMX、无 AJAX），每个操作都是完整的 HTTP 请求 → 服务器处理 → 整页刷新。<br>
+        引入了 SQLAlchemy ORM，告别 raw SQL。<br>
         这就是 ASP Classic / PHP 时代最原始的 Web 交互方式。<br>
-        可对比 <a href="http://localhost:8003">app-1 (HTMX 版)</a> 体验「局部刷新」带来的差异。
+        对比 <a href="http://localhost:8003">app-1（HTMX 版）</a> — 体验「局部刷新」带来的差异。
     </div>
 </body>
 </html>
