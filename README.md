@@ -78,7 +78,7 @@ app+3/  (FastAPI + Nuxt 4，SSR)                            🚧 预告
 | **CORS** | 无 | 无 | 无 | 无 | 无 | 有 | 有 |
 | **进程数** | 1 | 1 | 1 | 1 | 1 | 2 | 2 |
 | **端口** | 8006 | 8005 | 8002 | 8003 | 8000 | 8010+5173 | 8012+3000 |
-| **数据库文件** | todo-6.db | todo-5.db | todo-2.db | todo_htmx.db | todo.db | todo+1.db | todo+3.db |
+| **数据库文件** | todo-6.db | todo-5.db | todo-2.db | todo-1.db | todo.db | todo+1.db | — |
 | **模板文件** | 9 个 .mako | 2 个 .html | 2 个 .html | 3 个 .html | 1 个 .html | 0 | 0 |
 | **入口文件** | main.py | main.py | main.py | main.py | main.py | backend/main.py | backend/main.py |
 
