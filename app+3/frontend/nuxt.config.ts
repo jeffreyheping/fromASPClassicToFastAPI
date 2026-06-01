@@ -19,16 +19,5 @@ export default defineNuxtConfig({
     public: {
       apiBase: '/api'
     }
-  },
-  
-  // Nitro 配置（服务端引擎）
-  nitro: {
-    // 开发时的代理配置
-    devProxy: {
-      '/api': {
-        target: 'http://localhost:8012',
-        changeOrigin: true
-      }
-    }
   }
 })

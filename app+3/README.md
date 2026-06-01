@@ -57,7 +57,7 @@ app+3/
     ├── composables/
     │   └── useTodos.ts         # useFetch 封装
     └── server/api/
-        └── todos/[...].ts      # BFF 代理层
+        └── [...].ts      # BFF 代理层（catch-all）
 ```
 
 ---
@@ -107,7 +107,7 @@ npm run dev
 
 ### 1. BFF 代理层
 
-`server/api/todos/[...].ts` 捕获所有 `/api/todos/*` 请求，转发到 FastAPI：
+`server/api/[...].ts` 捕获所有 `/api/*` 请求，转发到 FastAPI：
 
 ```typescript
 export default defineEventHandler(async (event) => {

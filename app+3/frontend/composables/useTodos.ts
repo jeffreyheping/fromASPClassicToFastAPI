@@ -23,7 +23,7 @@ export const useTodos = () => {
       method: 'POST',
       body: { info }
     })
-    await refresh()  // 刷新列表
+    await refresh()
   }
 
   // 更新待办内容
